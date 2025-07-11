@@ -169,16 +169,19 @@ The `config/mobilekit.php` file centralizes the configuration of the starter kit
 
 ## Resources
 
-MobileKit includes support for:
+MobileKit includes comprehensive support for:
 
-- User and admin management
-- Multi-guard authentication system
-- Tailwind CSS integration
-- Database queue configuration
-- Customizable panel routing and branding
-- Native desktop application development (Electron)
-- Native mobile application development (Android/iOS)
-- Cross-platform deployment capabilities
+- **User Management** - User and admin management with multi-guard authentication
+- **UI Framework** - Tailwind CSS integration with Filament components
+- **Queue System** - Database queue configuration for background processing
+- **Panel System** - Customizable panel routing and branding
+- **Desktop Development** - Native desktop application development with NativePHP
+- **Mobile Development** - Native mobile application support
+- **Cross-Platform** - Full compatibility across Windows, macOS, Linux, iOS, and Android
+- **Testing Suite** - Pest PHP testing framework with Laravel integration
+- **Code Quality** - Laravel Pint formatting and Larastan static analysis
+- **Development Tools** - IDE helpers, log monitoring with Laravel Pail
+- **Asset Management** - Vite integration for modern asset compilation
 
 ## License
 
