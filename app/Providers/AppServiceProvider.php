@@ -123,10 +123,6 @@ class AppServiceProvider extends ServiceProvider
                 ->grouped();
         });
 
-        Forms\Components\Placeholder::configureUsing(function (Forms\Components\Placeholder $component) {
-            return $component->columnSpanFull();
-        });
-
         Forms\Components\TextInput::configureUsing(function (Forms\Components\TextInput $component) {
             return $component->minValue(0);
         });
@@ -165,10 +161,6 @@ class AppServiceProvider extends ServiceProvider
 
         Forms\Components\FileUpload::configureUsing(function (Forms\Components\FileUpload $component) {
             return $component->moveFiles();
-        });
-
-        Forms\Components\RichEditor::configureUsing(function (Forms\Components\RichEditor $component) {
-            return $component->disableToolbarButtons(['blockquote']);
         });
 
         Forms\Components\Textarea::configureUsing(function (Forms\Components\Textarea $component) {
