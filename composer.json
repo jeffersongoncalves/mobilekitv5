@@ -23,7 +23,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "filament/filament": "v4.0.3",
+        "filament/filament": "4.0.4",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
@@ -64,7 +64,8 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
             "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
-            "@php artisan filament:upgrade"
+            "@php artisan filament:upgrade",
+            "@php artisan native:install android --force --without-icu"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

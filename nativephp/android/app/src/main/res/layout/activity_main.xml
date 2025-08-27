@@ -26,7 +26,18 @@
             android:background="@android:color/background_dark"
             android:gravity="center">
 
+        <!-- Custom splash image (shown when splash.png is available) -->
+        <ImageView
+                android:id="@+id/splashImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="App splash screen"
+                android:visibility="gone" />
+
+        <!-- Fallback loading text (shown when no custom splash image) -->
         <TextView
+                android:id="@+id/splashText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Loading…"
@@ -34,6 +45,7 @@
                 android:textColor="@android:color/white"
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="64dp" />
+                android:layout_marginBottom="64dp"
+                android:visibility="visible" />
     </FrameLayout>
 </FrameLayout>

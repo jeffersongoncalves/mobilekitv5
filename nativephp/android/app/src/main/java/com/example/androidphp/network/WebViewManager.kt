@@ -7,6 +7,11 @@ import android.net.Uri
 import android.util.Log
 import android.webkit.*
 import android.widget.Toast
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.content.pm.ActivityInfo
+import android.app.Activity
 import com.acsbendi.requestinspectorwebview.RequestInspectorWebViewClient
 import com.example.androidphp.bridge.PHPBridge
 import com.example.androidphp.ui.MainActivity
@@ -19,6 +24,8 @@ class WebViewManager(
     private val phpBridge: PHPBridge
 ) {
     private val TAG = "PHPMonitor"
+    private var fullscreenView: View? = null
+    private var customViewCallback: WebChromeClient.CustomViewCallback? = null
 
     companion object {
         var shared: WebViewManager? = null
@@ -39,13 +46,13 @@ class WebViewManager(
         webView.settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
-            databaseEnabled = true
             allowFileAccess = true
             allowContentAccess = true
             loadsImagesAutomatically = true
             blockNetworkImage = false
             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            setSupportMultipleWindows(false)
+            mediaPlaybackRequiresUserGesture = false // Allows autoplay
+            setSupportMultipleWindows(true) // Required for fullscreen
             cacheMode = WebSettings.LOAD_DEFAULT
         }
 
@@ -66,6 +73,45 @@ class WebViewManager(
 
     private fun createWebChromeClient(): WebChromeClient {
         return object : WebChromeClient() {
+            override fun onShowCustomView(view: View, callback: CustomViewCallback) {
+                fullscreenView?.let { onHideCustomView() }
+
+                fullscreenView = view
+                customViewCallback = callback
+
+                (context as? Activity)?.let { activity ->
+                    val decorView = activity.window.decorView as FrameLayout
+                    decorView.addView(view,
+                        FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                    )
+                }
+
+                webView.visibility = View.GONE
+
+                (context as? Activity)?.requestedOrientation =
+                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }
+
+            override fun onHideCustomView() {
+                (context as? Activity)?.let { activity ->
+                    val decorView = activity.window.decorView as FrameLayout
+
+                    fullscreenView?.let { decorView.removeView(it) }
+                    fullscreenView = null
+
+                    webView.visibility = View.VISIBLE
+
+                    activity.requestedOrientation =
+                        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                    customViewCallback?.onCustomViewHidden()
+                    customViewCallback = null
+                }
+            }
+
             override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
                 Log.d(
                     "$TAG-Console",

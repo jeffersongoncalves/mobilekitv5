@@ -61,14 +61,30 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
         val laravelDir = File(appStorageDir, "laravel")
         val otaMarkerFile = File(laravelDir, ".ota_applied")
         
-        // Check if OTA update has been applied
-        if (otaMarkerFile.exists()) {
+        // Check if OTA is configured in both bundled and extracted versions
+        val bundledBifrostId = getBifrostAppId()
+        val extractedBifrostId = getBifrostAppIdFromExtracted()
+        val isBundledOtaConfigured = !bundledBifrostId.isNullOrEmpty()
+        val isExtractedOtaConfigured = !extractedBifrostId.isNullOrEmpty()
+        
+        // If OTA marker exists but bundled version no longer has OTA configured, remove marker and force extraction
+        if (otaMarkerFile.exists() && !isBundledOtaConfigured) {
+            val otaVersion = otaMarkerFile.readText().trim()
+            Log.d(TAG, "🔄 OTA removed from bundled version, rolling back from OTA version $otaVersion to bundled version")
+            Log.d(TAG, "🔍 Bundled BIFROST_APP_ID: '$bundledBifrostId', Extracted BIFROST_APP_ID: '$extractedBifrostId'")
+            otaMarkerFile.delete()
+            // Continue with extraction to rollback to bundled version
+        }
+        // If OTA marker exists and bundled version still has OTA configured, skip extraction
+        else if (otaMarkerFile.exists() && isBundledOtaConfigured) {
             val otaVersion = otaMarkerFile.readText().trim()
             Log.d(TAG, "✅ OTA update version $otaVersion is active, skipping bundle extraction")
             return
         }
 
         val embeddedVersion = getVersionFromBundledEnv() ?: readVersionFromZip("laravel_bundle.zip")
+        Log.d(TAG, "🔍 DEBUG: embeddedVersion from bundle = '$embeddedVersion'")
+        
         if (embeddedVersion == null) {
             Log.e(TAG, "❌ Couldn't read version from laravel_bundle.zip")
             return
@@ -78,19 +94,36 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
         val currentVersion = if (laravelDir.exists()) {
             val envFile = File(laravelDir, ".env")
             if (envFile.exists()) {
-                getVersionFromEnvFile(envFile)
+                val version = getVersionFromEnvFile(envFile)
+                Log.d(TAG, "🔍 DEBUG: currentVersion from extracted .env = '$version'")
+                version
             } else {
+                Log.d(TAG, "🔍 DEBUG: No .env file exists in extracted directory")
                 null
             }
         } else {
+            Log.d(TAG, "🔍 DEBUG: Laravel directory doesn't exist yet")
             null
         }
 
-        val isDebugOverride = currentVersion == "DEBUG"
-        val isUpToDate = currentVersion == embeddedVersion
+        // Remove quotes from version strings if present
+        val cleanEmbeddedVersion = embeddedVersion.trim('"')
+        val cleanCurrentVersion = currentVersion?.trim('"')
+        
+        val isDebugOverride = isDebugVersion(embeddedVersion)
+        val isUpToDate = cleanCurrentVersion == cleanEmbeddedVersion
+        
+        Log.d(TAG, "🔍 DEBUG: cleanEmbeddedVersion = '$cleanEmbeddedVersion'")
+        Log.d(TAG, "🔍 DEBUG: cleanCurrentVersion = '$cleanCurrentVersion'")
+        Log.d(TAG, "🔍 DEBUG: isDebugOverride = $isDebugOverride (isDebugVersion('$embeddedVersion'))")
+        Log.d(TAG, "🔍 DEBUG: isUpToDate = $isUpToDate (cleanCurrentVersion == cleanEmbeddedVersion)")
+        
+        // If DEBUG mode, ALWAYS extract. Otherwise, only extract if versions don't match
+        val shouldExtract = isDebugOverride || !isUpToDate
+        Log.d(TAG, "🔍 DEBUG: shouldExtract = $shouldExtract")
 
-        if (!isDebugOverride && isUpToDate) {
-            Log.d(TAG, "✅ Laravel already up to date (version $embeddedVersion)")
+        if (!shouldExtract) {
+            Log.d(TAG, "✅ Laravel already up to date (version $cleanEmbeddedVersion)")
             return
         }
 
@@ -112,10 +145,25 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
                 otaMarkerFile.delete()
             }
 
+            // Update .version file to match the environment value
+            val versionFromEnv = getVersionFromEnvFile(File(laravelDir, ".env"))
+            if (versionFromEnv != null) {
+                val versionFile = File(laravelDir, ".version")
+                val cleanVersion = versionFromEnv.trim('"').trim('\'')
+                versionFile.writeText(cleanVersion)
+                Log.d(TAG, "✅ Updated .version file to: $cleanVersion")
+            }
+
             Log.d(TAG, "✅ Extraction complete to ${laravelDir.absolutePath}")
         } catch (e: Exception) {
             Log.e(TAG, "❌ Failed to extract Laravel zip", e)
         }
+    }
+
+    private fun isDebugVersion(version: String?): Boolean {
+        if (version == null) return false
+        val cleaned = version.trim().trim('"').trim('\'')
+        return cleaned.equals("DEBUG", ignoreCase = true)
     }
 
     private fun readVersionFromZip(zipFileName: String): String? {
@@ -245,6 +293,32 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
         }
         
         Log.d(TAG, "No BIFROST_APP_ID found in bundled .env")
+        return null
+    }
+    
+    private fun getBifrostAppIdFromExtracted(): String? {
+        // Read from extracted .env file
+        val laravelDir = File(appStorageDir, "laravel")
+        val envFile = File(laravelDir, ".env")
+        
+        if (!envFile.exists()) {
+            return null
+        }
+        
+        try {
+            val envContent = envFile.readText()
+            val bifrostIdMatch = Regex("BIFROST_APP_ID=(.+)").find(envContent)
+            val bifrostId = bifrostIdMatch?.groupValues?.get(1)?.trim()
+            
+            if (!bifrostId.isNullOrEmpty()) {
+                Log.d(TAG, "Found BIFROST_APP_ID in extracted .env: $bifrostId")
+                return bifrostId
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to read BIFROST_APP_ID from extracted .env", e)
+        }
+        
+        Log.d(TAG, "No BIFROST_APP_ID found in extracted .env")
         return null
     }
     
@@ -388,14 +462,24 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
         zis.close()
     }
 
-    private fun copyAssetToInternalStorage(assetName: String, targetFileName: String): File {
+    private fun copyAssetToInternalStorage(assetName: String, targetFileName: String, forceUpdate: Boolean = false): File {
         val outFile = File(context.filesDir, targetFileName)
-        if (!outFile.exists()) {
-            context.assets.open(assetName).use { input ->
-                FileOutputStream(outFile).use { output ->
-                    input.copyTo(output)
+        
+        if (!outFile.exists() || forceUpdate) {
+            Log.d(TAG, "📋 Copying asset $assetName to ${outFile.absolutePath} (force=$forceUpdate)")
+            try {
+                context.assets.open(assetName).use { input ->
+                    FileOutputStream(outFile).use { output ->
+                        input.copyTo(output)
+                    }
                 }
+                Log.d(TAG, "✅ Successfully copied $assetName")
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Failed to copy asset $assetName", e)
+                throw e
             }
+        } else {
+            Log.d(TAG, "📋 Asset $assetName already exists, skipping copy")
         }
         return outFile
     }
@@ -455,13 +539,7 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
             Log.d(TAG, "✅ SQLite file already exists: ${dbFile.absolutePath}")
         }
 
-        phpBridge.runArtisanCommand("config:clear")
-        phpBridge.runArtisanCommand("clear-compiled")
         phpBridge.runArtisanCommand("optimize:clear")
-        phpBridge.runArtisanCommand("config:cache")
-        phpBridge.runArtisanCommand("route:clear")
-        phpBridge.runArtisanCommand("view:clear")
-        phpBridge.runArtisanCommand("cache:clear")
         val migrate = phpBridge.runArtisanCommand("migrate --force")
         Log.d(TAG, "✅ Migration result: $migrate")
     }
@@ -532,6 +610,7 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
             setEnvironmentVariable("CACHE_DRIVER", "file")
             setEnvironmentVariable("CACHE_STORE", "file")
             setEnvironmentVariable("QUEUE_CONNECTION", "sync")
+            setEnvironmentVariable("NATIVEPHP_PLATFORM", "android")
 
             setEnvironmentVariable("COOKIE_PATH", "/")
             setEnvironmentVariable("COOKIE_DOMAIN", "127.0.0.1")
@@ -567,12 +646,23 @@ class LaravelEnvironment<InputStream>(private val context: Context) {
             Log.d(TAG, "PHP session path set to: ${phpSessionDir.absolutePath}")
 
             try {
-                copyAssetToInternalStorage("cacert.pem", "cacert.pem")
+                // Check if we're in DEBUG mode to force certificate refresh
+                val isDebugMode = try {
+                    val versionFile = File(appStorageDir, "laravel/.version")
+                    versionFile.exists() && versionFile.readText().trim() == "DEBUG"
+                } catch (e: Exception) {
+                    false
+                }
+                
+                Log.d(TAG, "🔍 Certificate copy - DEBUG mode: $isDebugMode")
+                copyAssetToInternalStorage("cacert.pem", "cacert.pem", forceUpdate = isDebugMode)
+                
                 val phpIni = """
 curl.cainfo="${context.filesDir.absolutePath}/cacert.pem"
 openssl.cafile="${context.filesDir.absolutePath}/cacert.pem"
 """
                 File(context.filesDir, "php.ini").writeText(phpIni)
+                Log.d(TAG, "✅ PHP ini configured with certificate path: ${context.filesDir.absolutePath}/cacert.pem")
             } catch (e: Exception) {
                 Log.e(TAG, "❌ Failed to copy or set CURL_CA_BUNDLE", e)
             }

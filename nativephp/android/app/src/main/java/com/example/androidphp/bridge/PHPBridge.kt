@@ -222,8 +222,29 @@ class PHPBridge(private val context: Context) {
         NativeActions.showToast(context, message)
     }
 
-    fun nativeShowAlert(title: String, message: String) {
-        NativeActions.showAlert(context, title, message)
+    fun nativeInAppBrowser(url: String) {
+        NativeActions.openInAppBrowser(context, url)
+    }
+
+    fun nativeBrowserOpen(url: String) {
+        NativeActions.openSystemBrowser(context, url)
+    }
+
+    fun nativeBrowserOpenAuth(url: String) {
+        NativeActions.openAuthBrowser(context, url)
+    }
+
+    fun nativeShowAlert(title: String, message: String, buttons: Array<String>) {
+        Handler(Looper.getMainLooper()).post {
+            val activity = context as? FragmentActivity
+            if (activity == null) {
+                Log.e("PHPBridge", "❌ Context is not a FragmentActivity!")
+                return@post
+            }
+
+            val coord = NativeActionCoordinator.install(activity)
+            coord.launchAlert(title, message, buttons)
+        }
     }
 
     fun nativeShare(title: String, message: String) {
@@ -341,6 +362,70 @@ class PHPBridge(private val context: Context) {
         } catch (e: Exception) {
             Log.e(TAG, "❌ Failed to retrieve secure value", e)
             null
+        }
+    }
+
+    fun nativeOpenGallery(mediaType: String, multiple: Boolean, maxItems: Int) {
+        Log.d(TAG, "🖼️ nativeOpenGallery called: mediaType=$mediaType, multiple=$multiple, maxItems=$maxItems")
+        
+        // Launch gallery on UI thread
+        Handler(Looper.getMainLooper()).post {
+            val activity = context as? FragmentActivity
+            if (activity == null) {
+                Log.e(TAG, "❌ Context is not a FragmentActivity!")
+                return@post
+            }
+
+            val coord = NativeActionCoordinator.install(activity)
+            coord.launchGallery(mediaType, multiple, maxItems)
+        }
+    }
+
+    fun nativeGetLocation(fineAccuracy: Boolean) {
+        Log.d(TAG, "📍 nativeGetLocation called with fineAccuracy: $fineAccuracy")
+        
+        // Request location on UI thread
+        Handler(Looper.getMainLooper()).post {
+            val activity = context as? FragmentActivity
+            if (activity == null) {
+                Log.e(TAG, "❌ Context is not a FragmentActivity!")
+                return@post
+            }
+
+            val coord = NativeActionCoordinator.install(activity)
+            coord.launchLocationRequest(fineAccuracy)
+        }
+    }
+
+    fun nativeCheckLocationPermissions() {
+        Log.d(TAG, "🔒 nativeCheckLocationPermissions called")
+        
+        // Check permissions on UI thread
+        Handler(Looper.getMainLooper()).post {
+            val activity = context as? FragmentActivity
+            if (activity == null) {
+                Log.e(TAG, "❌ Context is not a FragmentActivity!")
+                return@post
+            }
+
+            val coord = NativeActionCoordinator.install(activity)
+            coord.launchLocationPermissionCheck()
+        }
+    }
+
+    fun nativeRequestLocationPermissions() {
+        Log.d(TAG, "🔒 nativeRequestLocationPermissions called")
+        
+        // Request permissions on UI thread
+        Handler(Looper.getMainLooper()).post {
+            val activity = context as? FragmentActivity
+            if (activity == null) {
+                Log.e(TAG, "❌ Context is not a FragmentActivity!")
+                return@post
+            }
+
+            val coord = NativeActionCoordinator.install(activity)
+            coord.launchLocationPermissionRequest()
         }
     }
 }

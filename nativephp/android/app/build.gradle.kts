@@ -10,7 +10,7 @@ if (googleServicesJson.exists()) {
 
 android {
     namespace = "com.example.androidphp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.androidphp"
@@ -67,7 +67,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = REPLACE_MINIFY_ENABLED
+            isShrinkResources = REPLACE_SHRINK_RESOURCES
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -83,13 +84,13 @@ android {
             }
             
             ndk {
-                debugSymbolLevel = "FULL"
+                debugSymbolLevel = "REPLACE_DEBUG_SYMBOLS"
             }
         }
         debug {
             isJniDebuggable = true
             ndk {
-                debugSymbolLevel = "FULL"
+                debugSymbolLevel = "REPLACE_DEBUG_SYMBOLS"
             }
         }
     }
@@ -140,7 +141,7 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Android Request Inspector WebView library
@@ -159,6 +160,7 @@ dependencies {
     // WebKit for WebView features
     implementation("androidx.webkit:webkit:1.6.1")
     implementation(libs.firebase.messaging.ktx)
+    implementation(libs.androidx.browser)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -171,6 +173,9 @@ dependencies {
     
     // AndroidX Security for encrypted storage
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    
+    // Google Play Services Location for geolocation functionality
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 }
 
 // Bundle task verification will be handled by the signing configuration itself

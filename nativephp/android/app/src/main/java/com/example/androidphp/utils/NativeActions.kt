@@ -9,7 +9,6 @@ import android.hardware.camera2.CameraCharacteristics
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -17,8 +16,7 @@ import androidx.core.content.FileProvider
 import java.io.File
 import android.hardware.camera2.CameraManager
 import com.example.androidphp.bridge.PHPBridge
-import com.example.androidphp.network.WebViewManager
-import org.json.JSONObject
+import androidx.browser.customtabs.CustomTabsIntent
 
 object NativeActions {
     private const val TAG = "NativeActions"
@@ -61,15 +59,40 @@ object NativeActions {
         }
     }
 
-    fun showAlert(context: Context, title: String, message: String) {
+    fun showAlert(context: Context, title: String, message: String, buttons: Array<String>, onButtonClick: (Int, String) -> Unit) {
         Handler(Looper.getMainLooper()).post {
             try {
-                AlertDialog.Builder(context)
+                val alertBuilder = AlertDialog.Builder(context)
                     .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                    .show()
-                Log.d(TAG, "✅ Alert displayed")
+                
+                // If no buttons provided, default to "OK"
+                val buttonLabels = if (buttons.isEmpty()) arrayOf("OK") else buttons
+                
+                // Add buttons dynamically
+                buttonLabels.forEachIndexed { index, buttonLabel ->
+                    when (index) {
+                        0 -> alertBuilder.setPositiveButton(buttonLabel) { dialog, _ -> 
+                            onButtonClick(index, buttonLabel)
+                            dialog.dismiss()
+                        }
+                        1 -> alertBuilder.setNegativeButton(buttonLabel) { dialog, _ -> 
+                            onButtonClick(index, buttonLabel)
+                            dialog.dismiss()
+                        }
+                        2 -> alertBuilder.setNeutralButton(buttonLabel) { dialog, _ -> 
+                            onButtonClick(index, buttonLabel)
+                            dialog.dismiss()
+                        }
+                        else -> {
+                            // Android AlertDialog only supports 3 buttons max
+                            Log.w(TAG, "⚠️ AlertDialog only supports up to 3 buttons, ignoring button: $buttonLabel")
+                        }
+                    }
+                }
+                
+                alertBuilder.show()
+                Log.d(TAG, "✅ Alert displayed with ${buttonLabels.size} buttons")
             } catch (e: Exception) {
                 Log.e(TAG, "❌ Error showing alert: ${e.message}", e)
             }
@@ -119,5 +142,26 @@ object NativeActions {
         } catch (e: Exception) {
             Log.e("NativeActions", "❌ Error toggling flashlight", e)
         }
+    }
+
+    fun openInAppBrowser(context: Context, url: String){
+        val intent = CustomTabsIntent.Builder().build()
+        intent.launchUrl(context, Uri.parse(url))
+    }
+
+    fun openSystemBrowser(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+        Log.d(TAG, "🌐 Opened URL in system browser: $url")
+    }
+
+    fun openAuthBrowser(context: Context, url: String) {
+        val intent = CustomTabsIntent.Builder()
+            .setShowTitle(true)
+            .setUrlBarHidingEnabled(false)
+            .build()
+        intent.launchUrl(context, Uri.parse(url))
+        Log.d(TAG, "🔐 Opened URL in auth browser: $url")
     }
 }

@@ -81,10 +81,9 @@ void NativePHPShowAlert(
         const char *title,
         const char *message,
         const char **buttonTitles,
-        int buttonCount,
-        void (*callback)(int)
+        int buttonCount
 ) {
-    LOGI("✅ NativePHPShowAlert called");
+    LOGI("✅ NativePHPShowAlert called with %d buttons", buttonCount);
 
     JNIEnv *env;
     if ((*g_jvm)->GetEnv(g_jvm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
@@ -97,26 +96,34 @@ void NativePHPShowAlert(
 
     if (g_bridge_instance) {
         jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        
+        // Create Java string array for buttons
+        jclass stringClass = (*env)->FindClass(env, "java/lang/String");
+        jobjectArray jbuttonArray = (*env)->NewObjectArray(env, buttonCount, stringClass, NULL);
+        
+        for (int i = 0; i < buttonCount; i++) {
+            jstring jbutton = (*env)->NewStringUTF(env, buttonTitles[i]);
+            (*env)->SetObjectArrayElement(env, jbuttonArray, i, jbutton);
+            (*env)->DeleteLocalRef(env, jbutton);
+        }
+        
         jmethodID mid = (*env)->GetMethodID(env, cls, "nativeShowAlert",
-                                            "(Ljava/lang/String;Ljava/lang/String;)V");
+                                            "(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V");
         if (mid) {
             jstring jtitle = (*env)->NewStringUTF(env, title);
             jstring jmessage = (*env)->NewStringUTF(env, message);
-            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jtitle, jmessage);
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jtitle, jmessage, jbuttonArray);
             (*env)->DeleteLocalRef(env, jtitle);
             (*env)->DeleteLocalRef(env, jmessage);
-            LOGI("✅ Called nativeShowAlert()");
+            (*env)->DeleteLocalRef(env, jbuttonArray);
+            LOGI("✅ Called nativeShowAlert() with buttons");
         } else {
-            LOGE("❌ nativeShowAlert(String, String) method not found");
+            LOGE("❌ nativeShowAlert(String, String, String[]) method not found");
         }
         (*env)->DeleteLocalRef(env, cls);
+        (*env)->DeleteLocalRef(env, stringClass);
     } else {
         LOGE("❌ g_bridge_instance is NULL");
-    }
-
-    // Call the callback immediately with button index 0 (simulate default OK button)
-    if (callback) {
-        callback(0);
     }
 }
 
@@ -351,6 +358,218 @@ void NativePHPSecureGet(const char *key, void *return_value)
     } else {
         LOGE("❌ g_bridge_instance is NULL");
         ZVAL_NULL(retval);
+    }
+}
+
+void NativePHPOpenGallery(const char* media_type, int multiple, int max_items) {
+    LOGI("🖼️ NativePHPOpenGallery called with media_type: %s, multiple: %d, max_items: %d", 
+         media_type, multiple, max_items);
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeOpenGallery", 
+                                            "(Ljava/lang/String;ZI)V");
+        
+        if (mid) {
+            jstring jmedia_type = (*env)->NewStringUTF(env, media_type);
+            jboolean jmultiple = multiple ? JNI_TRUE : JNI_FALSE;
+            jint jmax_items = (jint)max_items;
+            
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jmedia_type, jmultiple, jmax_items);
+            
+            (*env)->DeleteLocalRef(env, jmedia_type);
+            (*env)->DeleteLocalRef(env, cls);
+            LOGI("✅ Gallery launched via nativeOpenGallery()");
+        } else {
+            LOGE("❌ nativeOpenGallery(String, boolean, int) method not found");
+            (*env)->DeleteLocalRef(env, cls);
+        }
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
+    }
+}
+
+
+void NativePHPInAppBrowser(const char *url) {
+    LOGI("🌐 NativePHPInAppBrowser called with: %s", url);
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeInAppBrowser", "(Ljava/lang/String;)V");
+
+        if (mid) {
+            jstring jurl = (*env)->NewStringUTF(env, url);
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jurl);
+            (*env)->DeleteLocalRef(env, jurl);
+            LOGI("✅ nativeInAppBrowser() called in Kotlin");
+        } else {
+            LOGE("❌ nativeInAppBrowser(String) method not found");
+        }
+
+        (*env)->DeleteLocalRef(env, cls);
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
+    }
+}
+
+void NativePHPGetLocation(int fine_accuracy) {
+    LOGI("📍 NativePHPGetLocation called with fine_accuracy: %d", fine_accuracy);
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeGetLocation", "(Z)V");
+
+        if (mid) {
+            jboolean jfine_accuracy = fine_accuracy ? JNI_TRUE : JNI_FALSE;
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jfine_accuracy);
+            LOGI("✅ nativeGetLocation() called in Kotlin");
+        } else {
+            LOGE("❌ nativeGetLocation(boolean) method not found");
+        }
+
+        (*env)->DeleteLocalRef(env, cls);
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
+    }
+}
+
+void NativePHPCheckLocationPermissions(void) {
+    LOGI("🔒 NativePHPCheckLocationPermissions called");
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeCheckLocationPermissions", "()V");
+
+        if (mid) {
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid);
+            LOGI("✅ nativeCheckLocationPermissions() called in Kotlin");
+        } else {
+            LOGE("❌ nativeCheckLocationPermissions() method not found");
+        }
+
+        (*env)->DeleteLocalRef(env, cls);
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
+    }
+}
+
+void NativePHPRequestLocationPermissions(void) {
+    LOGI("🔒 NativePHPRequestLocationPermissions called");
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeRequestLocationPermissions", "()V");
+
+        if (mid) {
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid);
+            LOGI("✅ nativeRequestLocationPermissions() called in Kotlin");
+        } else {
+            LOGE("❌ nativeRequestLocationPermissions() method not found");
+        }
+
+        (*env)->DeleteLocalRef(env, cls);
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
+    }
+}
+
+void NativePHPBrowserOpen(const char *url) {
+    LOGI("🌐 NativePHPBrowserOpen called with: %s", url);
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeBrowserOpen", "(Ljava/lang/String;)V");
+
+        if (mid) {
+            jstring jurl = (*env)->NewStringUTF(env, url);
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jurl);
+            (*env)->DeleteLocalRef(env, jurl);
+            LOGI("✅ nativeBrowserOpen() called in Kotlin");
+        } else {
+            LOGE("❌ nativeBrowserOpen(String) method not found");
+        }
+
+        (*env)->DeleteLocalRef(env, cls);
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
+    }
+}
+
+void NativePHPBrowserOpenAuth(const char *url) {
+    LOGI("🔐 NativePHPBrowserOpenAuth called with: %s", url);
+
+    JNIEnv *env;
+    if ((*g_jvm)->GetEnv(g_jvm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) {
+        if ((*g_jvm)->AttachCurrentThread(g_jvm, &env, NULL) != JNI_OK) {
+            LOGE("❌ Failed to attach JNI thread");
+            return;
+        }
+    }
+
+    if (g_bridge_instance) {
+        jclass cls = (*env)->GetObjectClass(env, g_bridge_instance);
+        jmethodID mid = (*env)->GetMethodID(env, cls, "nativeBrowserOpenAuth", "(Ljava/lang/String;)V");
+
+        if (mid) {
+            jstring jurl = (*env)->NewStringUTF(env, url);
+            (*env)->CallVoidMethod(env, g_bridge_instance, mid, jurl);
+            (*env)->DeleteLocalRef(env, jurl);
+            LOGI("✅ nativeBrowserOpenAuth() called in Kotlin");
+        } else {
+            LOGE("❌ nativeBrowserOpenAuth(String) method not found");
+        }
+
+        (*env)->DeleteLocalRef(env, cls);
+    } else {
+        LOGE("❌ g_bridge_instance is NULL");
     }
 }
 
