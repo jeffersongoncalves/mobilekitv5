@@ -1,6 +1,0 @@
-{
-  global:
-    getdtablesize;
-    copy_file_range;
-  local: *;
-};
