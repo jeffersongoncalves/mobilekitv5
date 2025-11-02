@@ -1,6 +1,6 @@
 <div class="filament-hidden">
 
-![MobileKit](https://raw.githubusercontent.com/jeffersongoncalves/mobilekitv4/5.x/art/jeffersongoncalves-mobilekitv4.png)
+![MobileKit](https://raw.githubusercontent.com/jeffersongoncalves/mobilekitv5/5.x/art/jeffersongoncalves-mobilekitv5.png)
 
 </div>
 
@@ -54,7 +54,7 @@ alongside desktop applications for Windows, macOS, and Linux.
 
 Clone the repository
 ``` bash
-laravel new my-app --using=jeffersongoncalves/mobilekitv4
+laravel new my-app --using=jeffersongoncalves/mobilekitv5
 ```
 
 ###  Easy Installation
