@@ -1,21 +1,21 @@
 <div class="filament-hidden">
 
-![MobileKit](https://raw.githubusercontent.com/jeffersongoncalves/mobilekitv4/4.x/art/jeffersongoncalves-mobilekitv4.png)
+![MobileKit](https://raw.githubusercontent.com/jeffersongoncalves/mobilekitv4/5.x/art/jeffersongoncalves-mobilekitv4.png)
 
 </div>
 
-# MobileKit Start Kit NativePHP 1.x, Filament 4.x and Laravel 12.x
+# MobileKit Start Kit NativePHP 1.x, Filament 5.x and Laravel 12.x
 
 ## About MobileKit
 
-MobileKit is a robust starter kit built on Laravel 12.x, Filament 4.x and NativePHP 1.x, designed to accelerate the development of modern
+MobileKit is a robust starter kit built on Laravel 12.x, Filament 5.x and NativePHP 1.x, designed to accelerate the development of modern
 native desktop and mobile applications with a ready-to-use multi-panel structure. Build native iOS and Android applications using PHP,
 alongside desktop applications for Windows, macOS, and Linux.
 
 ## Features
 
 - **Laravel 12.x** - The latest version of the most elegant PHP framework
-- **Filament 4.x** - Powerful and flexible admin framework
+- **Filament 5.x** - Powerful and flexible admin framework
 - **NativePHP 1.x** - Build native desktop and mobile applications with PHP
 - **Mobile Development** - Native iOS and Android app development with NativePHP Mobile
 - **Desktop Development** - Native Windows, macOS, and Linux applications with NativePHP Electron
