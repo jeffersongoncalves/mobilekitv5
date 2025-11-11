@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 5.0.0-beta3 - 2025-11-11
+
+### What's Changed
+
+* build(deps-dev): bump autoprefixer from 10.4.21 to 10.4.22 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/6
+* build(deps): bump filament/filament from 5.0.0-beta2 to 5.0.0-beta3 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/7
+
+**Full Changelog**: https://github.com/jeffersongoncalves/mobilekitv5/compare/5.0.0-beta2...5.0.0-beta3
+
 ## 5.0.0-beta2 - 2025-11-08
 
 ### What's Changed
