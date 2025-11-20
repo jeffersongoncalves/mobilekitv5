@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 5.0.0-beta4 - 2025-11-20
+
+### What's Changed
+
+* build(deps): bump symfony/http-foundation from 7.3.6 to 7.3.7 by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/8
+* build(deps): bump the actions-deps group with 2 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/9
+* build(deps): bump livewire/livewire from 4.0.0-beta.2 to 4.0.0-beta.3 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/10
+* build(deps): bump the actions-deps group with 3 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/11
+* build(deps-dev): bump vite from 7.2.2 to 7.2.4 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/12
+* build(deps-dev): bump nunomaduro/collision from 8.8.2 to 8.8.3 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/13
+
+**Full Changelog**: https://github.com/jeffersongoncalves/mobilekitv5/compare/5.0.0-beta3...5.0.0-beta4
+
 ## 5.0.0-beta3 - 2025-11-11
 
 ### What's Changed
