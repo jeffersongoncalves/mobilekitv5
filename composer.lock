@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f1a5a1ddd40c99b050ab1fa47fba13b",
+    "content-hash": "d1b51bd39a9b9ce89909f1a3c22fd6d9",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3470,12 +3470,12 @@
         },
         {
             "name": "nativephp/mobile",
-            "version": "1.13.0",
+            "version": "2.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nativephp.composer.sh/download/a037a352-8208-4b7a-913d-e56be0253845/nativephp-1.13.0.zip",
-                "reference": "0d8732ea745b370502ae5981fd16aeb262fe467c",
-                "shasum": "b1f46c7f15e645df703bfff9293ea8adee9059d8"
+                "url": "https://nativephp.composer.sh/download/a0779475-cc6c-4932-8fcc-05a76600c7a3/nativephp-2.0.0.zip",
+                "reference": "525ce93d7e8f2b5645857ff827e0db7dc14579a0",
+                "shasum": "da3169f4d076e7c8d9f23cc56477457dab892e97"
             },
             "require": {
                 "ext-dom": "*",
@@ -3546,18 +3546,13 @@
             "authors": [
                 {
                     "name": "Simon Hamp",
-                    "role": "Developer",
+                    "role": "Co-founder",
                     "email": "simon@nativephp.com"
                 },
                 {
                     "name": "Shane Rosenthal",
-                    "role": "Developer",
+                    "role": "Co-founder",
                     "email": "shane@nativephp.com"
-                },
-                {
-                    "name": "Marcel Pociot",
-                    "role": "Developer",
-                    "email": "marcel@beyondco.de"
                 }
             ],
             "description": "NativePHP for Mobile",
@@ -3568,7 +3563,7 @@
                 "laravel",
                 "nativephp"
             ],
-            "time": "2025-10-27T23:37:18+00:00"
+            "time": "2025-11-28T18:28:45+00:00"
         },
         {
             "name": "nesbot/carbon",
