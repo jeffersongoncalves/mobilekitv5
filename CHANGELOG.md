@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 5.0.0-beta5 - 2025-11-28
+
+### What's Changed
+
+* build(deps): bump actions/checkout from 5 to 6 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/14
+* Remove unused dependencies and clean up configurations by @jeffersongoncalves in https://github.com/jeffersongoncalves/mobilekitv5/pull/15
+* build(deps): bump the actions-deps group with 4 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/16
+* build(deps): bump laravel/framework from 12.40.1 to 12.40.2 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/17
+
+### New Contributors
+
+* @jeffersongoncalves made their first contribution in https://github.com/jeffersongoncalves/mobilekitv5/pull/15
+
+**Full Changelog**: https://github.com/jeffersongoncalves/mobilekitv5/compare/5.0.0-beta4...5.0.0-beta5
+
 ## 5.0.0-beta4 - 2025-11-20
 
 ### What's Changed
