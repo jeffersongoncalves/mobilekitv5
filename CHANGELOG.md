@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 5.0.0-beta7 - 2025-12-09
+
+### What's Changed
+
+* build(deps-dev): bump vite from 7.2.6 to 7.2.7 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/22
+* build(deps): bump the actions-deps group with 2 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/23
+* build(deps): bump the actions-deps group with 2 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/24
+
+**Full Changelog**: https://github.com/jeffersongoncalves/mobilekitv5/compare/5.0.0-beta6...5.0.0-beta7
+
 ## 5.0.0-beta6 - 2025-12-05
 
 ### What's Changed
