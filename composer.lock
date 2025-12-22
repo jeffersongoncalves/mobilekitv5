@@ -3473,12 +3473,12 @@
         },
         {
             "name": "nativephp/mobile",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nativephp.composer.sh/download/a094373b-a384-4731-84e3-9f9a2d18750f/nativephp-2.2.0.zip",
-                "reference": "0d2c9976f2b049d9cb6e3095156ebb45afa512b6",
-                "shasum": "3a8dc51d51957d684f19172d611ee6b6301e9aed"
+                "url": "https://nativephp.composer.sh/download/a0a686b3-e3b3-4215-b251-80c3cd1e15f8/nativephp-2.3.0.zip",
+                "reference": "e6618043c215e99eb126295458fa364cc28ecd1d",
+                "shasum": "edeeb9d43c7972ce818a8194a707836600fd4cb0"
             },
             "require": {
                 "ext-dom": "*",
@@ -3566,7 +3566,7 @@
                 "laravel",
                 "nativephp"
             ],
-            "time": "2025-12-13T00:07:04+00:00"
+            "time": "2025-12-22T02:34:10+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -12290,7 +12290,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "filament/filament": 10
+        "filament/filament": 10,
+        "livewire/livewire": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
