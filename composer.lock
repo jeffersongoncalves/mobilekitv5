@@ -3472,12 +3472,12 @@
         },
         {
             "name": "nativephp/mobile",
-            "version": "2.6.0",
+            "version": "2.6.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nativephp.composer.sh/download/a0d25772-fd0d-4a40-9cb8-10496c37b7c6/nativephp-2.6.0.zip",
-                "reference": "d5944a95665eaaee4850db4e7129901c642882b2",
-                "shasum": "e293113a4f49c68ef907d3f9af2d2d6ba0a8303e"
+                "url": "https://nativephp.composer.sh/download/a0def216-93a9-4f25-a248-d1cbbdaef0d6/nativephp-2.6.2.zip",
+                "reference": "cc065f24d5a3c81c26fff66a14b28ed554243db4",
+                "shasum": "10af3522ec6a9acc40e90a395dcacb1cafc982ad"
             },
             "require": {
                 "ext-dom": "*",
@@ -3565,7 +3565,7 @@
                 "laravel",
                 "nativephp"
             ],
-            "time": "2026-01-12T21:18:28+00:00"
+            "time": "2026-01-19T03:40:49+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -9157,16 +9157,16 @@
         },
         {
             "name": "larastan/larastan",
-            "version": "v3.8.1",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "ff3725291bc4c7e6032b5a54776e3e5104c86db9"
+                "reference": "82c18890d0d5b012bc39a3432531e5b6cd1b4b3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/ff3725291bc4c7e6032b5a54776e3e5104c86db9",
-                "reference": "ff3725291bc4c7e6032b5a54776e3e5104c86db9",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/82c18890d0d5b012bc39a3432531e5b6cd1b4b3a",
+                "reference": "82c18890d0d5b012bc39a3432531e5b6cd1b4b3a",
                 "shasum": ""
             },
             "require": {
@@ -9235,7 +9235,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v3.8.1"
+                "source": "https://github.com/larastan/larastan/tree/v3.9.0"
             },
             "funding": [
                 {
@@ -9243,7 +9243,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-11T16:37:35+00:00"
+            "time": "2026-01-17T23:00:37+00:00"
         },
         {
             "name": "laravel/pail",
@@ -12304,5 +12304,5 @@
         "ext-pcntl": "7.1",
         "ext-posix": "7.1"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
