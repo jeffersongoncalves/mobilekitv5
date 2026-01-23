@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 5.1.0 - 2026-01-23
+
+### What's Changed
+
+* build(deps): bump the actions-deps group with 2 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/47
+* build(deps-dev): bump laravel-vite-plugin from 2.0.1 to 2.1.0 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/48
+* build(deps): bump the actions-deps group with 3 updates by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/49
+* build(deps): bump livewire/livewire from 4.0.2 to 4.0.3 in the actions-deps group by @dependabot[bot] in https://github.com/jeffersongoncalves/mobilekitv5/pull/50
+
+**Full Changelog**: https://github.com/jeffersongoncalves/mobilekitv5/compare/5.0.0...5.1.0
+
 ## 5.0.0-beta9 - 2026-01-09
 
 ### What's Changed
