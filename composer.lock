@@ -8296,24 +8296,24 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-debugbar",
-            "version": "v4.0.9",
+            "version": "v4.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruitcake/laravel-debugbar.git",
-                "reference": "4eee2f032172fd6548028395d7a1adbd8eae2ba0"
+                "reference": "96afd5efc93c2cb3140df356893381296259695b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruitcake/laravel-debugbar/zipball/4eee2f032172fd6548028395d7a1adbd8eae2ba0",
-                "reference": "4eee2f032172fd6548028395d7a1adbd8eae2ba0",
+                "url": "https://api.github.com/repos/fruitcake/laravel-debugbar/zipball/96afd5efc93c2cb3140df356893381296259695b",
+                "reference": "96afd5efc93c2cb3140df356893381296259695b",
                 "shasum": ""
             },
             "require": {
-                "illuminate/routing": "^11|^12",
-                "illuminate/session": "^11|^12",
-                "illuminate/support": "^11|^12",
+                "illuminate/routing": "^11|^12|^13.0",
+                "illuminate/session": "^11|^12|^13.0",
+                "illuminate/support": "^11|^12|^13.0",
                 "php": "^8.2",
-                "php-debugbar/php-debugbar": "^3.1",
+                "php-debugbar/php-debugbar": "^3.3.1",
                 "php-debugbar/symfony-bridge": "^1.1"
             },
             "require-dev": {
@@ -8379,7 +8379,7 @@
             ],
             "support": {
                 "issues": "https://github.com/fruitcake/laravel-debugbar/issues",
-                "source": "https://github.com/fruitcake/laravel-debugbar/tree/v4.0.9"
+                "source": "https://github.com/fruitcake/laravel-debugbar/tree/v4.0.10"
             },
             "funding": [
                 {
@@ -8391,7 +8391,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-17T08:14:13+00:00"
+            "time": "2026-02-26T11:45:48+00:00"
         },
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -10232,16 +10232,16 @@
         },
         {
             "name": "php-debugbar/php-debugbar",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-debugbar/php-debugbar.git",
-                "reference": "e50d470344b62a033a76d3d10a803b04c8e3be69"
+                "reference": "ee9c718797a4c1fdf6c4d980cb3edcc1eeeddcc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-debugbar/php-debugbar/zipball/e50d470344b62a033a76d3d10a803b04c8e3be69",
-                "reference": "e50d470344b62a033a76d3d10a803b04c8e3be69",
+                "url": "https://api.github.com/repos/php-debugbar/php-debugbar/zipball/ee9c718797a4c1fdf6c4d980cb3edcc1eeeddcc7",
+                "reference": "ee9c718797a4c1fdf6c4d980cb3edcc1eeeddcc7",
                 "shasum": ""
             },
             "require": {
@@ -10318,7 +10318,7 @@
             ],
             "support": {
                 "issues": "https://github.com/php-debugbar/php-debugbar/issues",
-                "source": "https://github.com/php-debugbar/php-debugbar/tree/v3.4.0"
+                "source": "https://github.com/php-debugbar/php-debugbar/tree/v3.4.1"
             },
             "funding": [
                 {
@@ -10330,7 +10330,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-14T14:10:26+00:00"
+            "time": "2026-02-26T11:40:30+00:00"
         },
         {
             "name": "php-debugbar/symfony-bridge",
@@ -12343,16 +12343,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "79155f94852fa27e2f73b459f6503f5e87e2c188"
+                "reference": "ff31ad6efc62e66e518fbab1cde3453d389bcdc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/79155f94852fa27e2f73b459f6503f5e87e2c188",
-                "reference": "79155f94852fa27e2f73b459f6503f5e87e2c188",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/ff31ad6efc62e66e518fbab1cde3453d389bcdc8",
+                "reference": "ff31ad6efc62e66e518fbab1cde3453d389bcdc8",
                 "shasum": ""
             },
             "require": {
@@ -12399,9 +12399,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/2.1.5"
+                "source": "https://github.com/webmozarts/assert/tree/2.1.6"
             },
-            "time": "2026-02-18T14:09:36+00:00"
+            "time": "2026-02-27T10:28:38+00:00"
         }
     ],
     "aliases": [],
